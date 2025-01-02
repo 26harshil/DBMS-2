@@ -165,15 +165,35 @@ SELECT DBO.FN_1TON(10)
 		SELECT DBO.FN_PALINDROME('AAAA')
 --Part – C
 --11. Write a function to check whether a given number is prime or not.
-       CREATE OR ALTER FUNCTION FN_PRIME(@A INT)
-	   RETURNS VARCHAR(50)
-	   AS 
-	   BEGIN
+CREATE OR ALTER FUNCTION FN_PRIME(@A INT)
+RETURNS VARCHAR(50)
+AS 
+BEGIN
+    DECLARE @C INT
+    SET @C = 2
+    
+    WHILE @C <= SQRT(@A)
+    BEGIN
+        IF @A % @C = 0
+        BEGIN
+            RETURN 'not prime'
+        END
+        SET @C = @C + 1
+    END
+    RETURN 'prime number'
+END
 
-	      DECLARE @SUM INT, @C INT
-			SET @C=0
+		  	     
+		  	
 
 --12. Write a function which accepts two parameters start date & end date, and returns a difference in days.
+CREATE OR ALTER FUNCTION FN_DATEDIFF(@START DATE, @END DATE)
+RETURNS INT
+AS
+BEGIN
+    RETURN DATEDIFF(DAY, @START, @END)
+END
+
 --13. Write a function which accepts two parameters year & month in integer and returns total days each
 --year.
 
@@ -191,4 +211,19 @@ BEGIN
 END
 SELECT DBO.FN_DAYYEAR(2012,2)
 --14. Write a function which accepts departmentID as a parameter & returns a detail of the persons.
+
+CREATE OR ALTER FUNCTION fn_detail(@did INT)
+RETURNS TABLE
+RETURN (
+    SELECT * FROM persons
+    WHERE departmentID = @did
+)
+
 --15. Write a function that returns a table with details of all persons who joined after 1-1-1991.
+
+CREATE OR ALTER FUNCTION FN_PERSON_JOININGDATE()
+RETURNS TABLE
+RETURN (
+    SELECT FIRSTNAME FROM persons
+    WHERE JOININGDATE > '1991-01-01'
+)
